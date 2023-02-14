@@ -8,7 +8,7 @@
 #include "Robot.hpp"
 #include <utility>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 
 namespace CocCoc
@@ -32,7 +32,7 @@ void Robot::setPos(int x, int y) {
 }
 
 void Robot::moveTo(int x, int y, std::unique_ptr<ConsoleGrid> &console_grid) {
-    this->setPos(x, y);
+    setPos(x, y);
 }
 
 void fillPixel(int major, int minor, bool horizontal, std::unique_ptr<ConsoleGrid> &console_grid) {
@@ -59,7 +59,7 @@ void fillPixels(int start, int end, int start_minor, double slope, bool horizont
 }
 
 void Robot::lineTo(int x, int y, std::unique_ptr<ConsoleGrid> &console_grid) {
-    auto [pos_x, pos_y] = this->getPos();
+    auto [pos_x, pos_y] = getPos();
     fillPixel(pos_x, pos_y, true, console_grid);
     
     if (pos_x == x && pos_y == y)
@@ -72,7 +72,7 @@ void Robot::lineTo(int x, int y, std::unique_ptr<ConsoleGrid> &console_grid) {
     else
         fillPixels(pos_y, y, pos_x, (double)(x - pos_x) / (double)(y - pos_y), false, console_grid);
     
-    this->setPos(x, y);
+    setPos(x, y);
     
 }
 }

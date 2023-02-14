@@ -9,6 +9,7 @@
 #define ConsoleGrid_hpp
 
 #include "Grid.hpp"
+#include <vector>
 
 namespace CocCoc
 {
@@ -22,7 +23,7 @@ public:
     void output();
     
 private:
-    vector<vector<int> > grid;
+    std::vector<std::vector<int> > grid;
 };
 
 }

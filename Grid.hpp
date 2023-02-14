@@ -8,14 +8,8 @@
 #ifndef Grid_hpp
 #define Grid_hpp
 
-#include <string>
-#include <vector>
-
 namespace CocCoc
 {
-
-using namespace std;
-
 class Grid {
 public:
     virtual ~Grid() {};

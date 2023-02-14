@@ -2,6 +2,6 @@
 
 Usage:
 ```sh 
-g++ *.cpp -o main 
+g++ -std=c++17 *.cpp -o main
 ./main input_file
 ```

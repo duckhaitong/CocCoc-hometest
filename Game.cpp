@@ -6,28 +6,36 @@
 //
 
 #include "Game.hpp"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <memory>
+#include <stdexcept>
 namespace CocCoc
 {
-Game::Game(string input_file) : input_file_(input_file) {
+Game::Game(std::string input_file) : input_file_(input_file) {
     robot = std::make_unique<Robot>(0, 0);
     console_grid = std::make_unique<ConsoleGrid>();
-    this->Run();
+    Run();
 }
 
-vector<string> Game::parseFileToCommands(string input_file) {
-    ifstream input;
+std::vector<std::string> Game::parseFileToCommands(std::string input_file) {
+    std::ifstream input;
     input.open(input_file.c_str());
     
     if (!input.good()) {
-        cerr << "Error: " << input_file << ": " << strerror(errno) << endl;
+        std::cerr << "Error: " << input_file << ": " << strerror(errno) << std::endl;
         exit(EXIT_FAILURE);
     }
     
-    ofstream output;
-    vector<string> commands;
+    std::ofstream output;
+    std::vector<std::string> commands;
     
     while (!input.eof()) {
-        string command;
+        std::string command;
         getline(input, command);
         
         if (command.size() > 0) {
@@ -39,10 +47,10 @@ vector<string> Game::parseFileToCommands(string input_file) {
     return commands;
 }
 
-vector<string> split(const string &s, char delim) {
-    stringstream ss(s);
-    string item;
-    vector<string> elems;
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::stringstream ss(s);
+    std::string item;
+    std::vector<std::string> elems;
     
     while (getline(ss, item, delim)) {
         elems.push_back(item);
@@ -52,26 +60,34 @@ vector<string> split(const string &s, char delim) {
 }
 
 void Game::Run() {
-    vector<string> commands = this->parseFileToCommands(this->input_file_);
-    vector<string> elems = split(commands[0], ' ');
+    std::vector<std::string> commands = parseFileToCommands(input_file_);
+    std::vector<std::string> elems = split(commands[0], ' ');
     const int size = stoi(elems.back());
-    this->console_grid->initiateGrid(size);
+    console_grid->initiateGrid(size);
     
-    commands.erase(commands.begin());
+    commands.erase(commands.begin()); // remove DIMENSION command
     
     for (auto &command : commands) {
-        string cmd = split(command, ' ')[0];
-        string pos = split(command, ' ')[1];
-        int x = stoi(split(pos, ',')[0]);
-        int y = stoi(split(pos, ',')[1]);
-        if (cmd == "MOVE_TO") {
-            this->robot->moveTo(x, y, this->console_grid);
-        }
-        if (cmd == "LINE_TO") {
-            this->robot->lineTo(x, y, this->console_grid);
+        std::string cmd = split(command, ' ')[0];
+        std::string pos = split(command, ' ')[1];
+        try {
+            int x = stoi(split(pos, ',')[0]);
+            int y = stoi(split(pos, ',')[1]);
+            if (x < 0 || y < 0 || x >= size || y >= size) {
+                throw std::invalid_argument("Invalid position.");
+            }
+            if (cmd == "MOVE_TO") {
+                robot->moveTo(x, y, console_grid);
+            }
+            if (cmd == "LINE_TO") {
+                robot->lineTo(x, y, console_grid);
+            }
+        } catch (std::invalid_argument& e) {
+            std::cerr << e.what() << std::endl;
+            return;
         }
     }
     
-    this->console_grid->output();
+    console_grid->output();
 }
 }

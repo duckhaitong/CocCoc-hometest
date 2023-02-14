@@ -8,13 +8,13 @@
 #include "Game.hpp"
 
 int main(int argc, const char * argv[]) {
-//    if (argc != 2) {
-//        std::cout << "Usage: ./main input_file" << std::endl;
-//        exit(EXIT_FAILURE);
-//    }
-//
-//    std::string input_file = argv[1];
-    CocCoc::Game("/Users/ktong/Code/RobotMovement/RobotMovement/input.txt");
+    if (argc != 2) {
+        std::cout << "Usage: ./main input_file" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    std::string input_file = argv[1];
+    CocCoc::Game(input_file.c_str());
     
     return 0;
 }

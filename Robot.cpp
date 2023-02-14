@@ -55,7 +55,7 @@ void fillPixels(int start, int end, int start_minor, double slope, bool horizont
     {
         int int_minor;
         if (isVertex(cur_minor)) {
-            int_minor = slope > 0 ? round(cur_minor) : round(cur_minor) - 1;
+            int_minor = (advance * slope) > 0 ? round(cur_minor) : round(cur_minor) - 1;
         } else {
             int_minor = (int)floor(cur_minor);
         }

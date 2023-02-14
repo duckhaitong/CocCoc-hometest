@@ -53,7 +53,7 @@ void fillPixels(int start, int end, int start_minor, double slope, bool horizont
     double cur_minor = start_minor + 0.5 + (0.5 * advance * slope);
     for (int cur_major = start + advance; cur_major != end; cur_major += advance)
     {
-        fillPixel(cur_major, (int)floor(cur_minor), horizontal, console_grid);
+        fillPixel(cur_major, isVertex(cur_minor) ? round(cur_minor) : (int)floor(cur_minor), horizontal, console_grid);
         
         double new_minor = cur_minor + (advance * slope);
         if (floor(new_minor) != floor(cur_minor) && !isVertex(new_minor))

@@ -14,6 +14,7 @@
 #include <sstream>
 #include <memory>
 #include <stdexcept>
+
 namespace CocCoc
 {
 Game::Game(std::string input_file) : input_file_(input_file) {

@@ -36,11 +36,17 @@ void Robot::moveTo(int x, int y, std::unique_ptr<ConsoleGrid> &console_grid) {
     setPos(x, y);
 }
 
+/**
+ * check if minor-coordinate is on vertex of unit square,
+ * equivalent to being an integer
+ * @param minor the minor-coordinate
+ * @return true if minor-coordinate is on vertex of unit square
+ */
 bool isVertex(double minor) {
     return abs(round(minor) - minor) < EPSILON;
 }
 
-void fillPixel(int major, int minor, bool horizontal, std::unique_ptr<ConsoleGrid> &console_grid) {
+void markSquare(int major, int minor, bool horizontal, std::unique_ptr<ConsoleGrid> &console_grid) {
     
     if (horizontal) // x is major axis
         console_grid->updateGrid(major, minor);
@@ -48,7 +54,10 @@ void fillPixel(int major, int minor, bool horizontal, std::unique_ptr<ConsoleGri
         console_grid->updateGrid(minor, major);
 }
 
-void fillPixels(int start, int end, int start_minor, double slope, bool horizontal, std::unique_ptr<ConsoleGrid> &console_grid) {
+/**
+ * mark all the unit squares that line passes between start point and end point
+ */
+void markSquares(int start, int end, int start_minor, double slope, bool horizontal, std::unique_ptr<ConsoleGrid> &console_grid) {
     int advance = end > start ? 1 : -1;
     double cur_minor = start_minor + 0.5 + (0.5 * advance * slope);
     for (int cur_major = start + advance; cur_major != end; cur_major += advance)
@@ -59,11 +68,11 @@ void fillPixels(int start, int end, int start_minor, double slope, bool horizont
         } else {
             int_minor = (int)floor(cur_minor);
         }
-        fillPixel(cur_major, int_minor, horizontal, console_grid);
+        markSquare(cur_major, int_minor, horizontal, console_grid);
         
         double new_minor = cur_minor + (advance * slope);
         if (floor(new_minor) != floor(cur_minor) && !isVertex(new_minor) && !isVertex(cur_minor))
-             fillPixel(cur_major, (int)floor(new_minor), horizontal, console_grid);
+             markSquare(cur_major, (int)floor(new_minor), horizontal, console_grid);
         
         cur_minor = new_minor;
     }
@@ -71,17 +80,17 @@ void fillPixels(int start, int end, int start_minor, double slope, bool horizont
 
 void Robot::lineTo(int x, int y, std::unique_ptr<ConsoleGrid> &console_grid) {
     auto [pos_x, pos_y] = getPos();
-    fillPixel(pos_x, pos_y, true, console_grid);
+    markSquare(pos_x, pos_y, true, console_grid);
     
     if (pos_x == x && pos_y == y)
         return;
     
-    fillPixel(x, y, true, console_grid);
+    markSquare(x, y, true, console_grid);
     
     if (abs(x - pos_x) >= abs(y - pos_y))
-        fillPixels(pos_x, x, pos_y, (double)(y - pos_y) / (double)(x - pos_x), true, console_grid);
+        markSquares(pos_x, x, pos_y, (double)(y - pos_y) / (double)(x - pos_x), true, console_grid);
     else
-        fillPixels(pos_y, y, pos_x, (double)(x - pos_x) / (double)(y - pos_y), false, console_grid);
+        markSquares(pos_y, y, pos_x, (double)(x - pos_x) / (double)(y - pos_y), false, console_grid);
     
     setPos(x, y);
     

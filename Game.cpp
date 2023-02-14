@@ -62,7 +62,7 @@ std::vector<std::string> split(const std::string &s, char delim) {
 
 void Game::Run() {
     std::vector<std::string> commands = parseFileToCommands(input_file_);
-    std::vector<std::string> elems = split(commands[0], ' ');
+    std::vector<std::string> elems = split(commands[0], ' '); // split DIMENSION command
     const int size = stoi(elems.back());
     console_grid->initiateGrid(size);
     

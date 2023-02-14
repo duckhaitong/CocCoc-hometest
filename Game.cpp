@@ -85,7 +85,7 @@ void Game::Run() {
             }
         } catch (std::invalid_argument& e) {
             std::cerr << e.what() << std::endl;
-            return;
+            exit(EXIT_FAILURE);
         }
     }
     

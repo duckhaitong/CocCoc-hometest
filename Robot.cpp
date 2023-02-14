@@ -9,6 +9,7 @@
 #include <utility>
 #include <iostream>
 #include <cmath>
+#define EPSILON 1e-9
 
 
 namespace CocCoc
@@ -35,6 +36,10 @@ void Robot::moveTo(int x, int y, std::unique_ptr<ConsoleGrid> &console_grid) {
     setPos(x, y);
 }
 
+bool isVertex(double minor) {
+    return abs(round(minor) - minor) < EPSILON;
+}
+
 void fillPixel(int major, int minor, bool horizontal, std::unique_ptr<ConsoleGrid> &console_grid) {
     
     if (horizontal) // x is major axis
@@ -51,8 +56,8 @@ void fillPixels(int start, int end, int start_minor, double slope, bool horizont
         fillPixel(cur_major, (int)floor(cur_minor), horizontal, console_grid);
         
         double new_minor = cur_minor + (advance * slope);
-        if (floor(new_minor) != floor(cur_minor) && slope != 1)
-            fillPixel(cur_major, (int)floor(new_minor), horizontal, console_grid);
+        if (floor(new_minor) != floor(cur_minor) && !isVertex(new_minor))
+             fillPixel(cur_major, (int)floor(new_minor), horizontal, console_grid);
         
         cur_minor = new_minor;
     }

@@ -16,7 +16,7 @@ namespace CocCoc
 {
 using namespace std;
 
-Robot::Robot(int x, int y) : pos_x{x}, pos_y{y} {}
+Robot::Robot(int x, int y) : pos_x{std::move(x)}, pos_y{std::move(y)} {}
 
 Robot::~Robot() {
     

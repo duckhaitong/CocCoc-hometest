@@ -17,7 +17,7 @@
 
 namespace CocCoc
 {
-Game::Game(std::string input_file) : input_file_(input_file) {
+Game::Game(std::string input_file) : input_file_(std::move(input_file)) {
     robot = std::make_unique<Robot>(0, 0);
     console_grid = std::make_unique<ConsoleGrid>();
     Run();

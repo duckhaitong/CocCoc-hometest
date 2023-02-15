@@ -66,13 +66,13 @@ void markSquares(int start, int end, int start_minor, double slope, bool horizon
         if (isVertex(cur_minor)) {
             int_minor = (advance * slope) > 0 ? round(cur_minor) : round(cur_minor) - 1;
         } else {
-            int_minor = (int)floor(cur_minor);
+            int_minor = static_cast<int>(floor(cur_minor));
         }
         markSquare(cur_major, int_minor, horizontal, console_grid);
         
         double new_minor = cur_minor + (advance * slope);
         if (floor(new_minor) != floor(cur_minor) && !isVertex(new_minor) && !isVertex(cur_minor))
-             markSquare(cur_major, (int)floor(new_minor), horizontal, console_grid);
+             markSquare(cur_major, static_cast<int>(floor(new_minor)), horizontal, console_grid);
         
         cur_minor = new_minor;
     }
@@ -88,9 +88,9 @@ void Robot::lineTo(int x, int y, std::unique_ptr<ConsoleGrid> &console_grid) {
     markSquare(x, y, true, console_grid);
     
     if (abs(x - pos_x) >= abs(y - pos_y))
-        markSquares(pos_x, x, pos_y, (double)(y - pos_y) / (double)(x - pos_x), true, console_grid);
+        markSquares(pos_x, x, pos_y, static_cast<double>((y - pos_y)) / static_cast<double>((x - pos_x)), true, console_grid);
     else
-        markSquares(pos_y, y, pos_x, (double)(x - pos_x) / (double)(y - pos_y), false, console_grid);
+        markSquares(pos_y, y, pos_x, static_cast<double>((x - pos_x)) / static_cast<double>((y - pos_y)), false, console_grid);
     
     setPos(x, y);
     
